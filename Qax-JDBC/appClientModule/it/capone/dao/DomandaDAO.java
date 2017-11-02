@@ -390,9 +390,9 @@ public class DomandaDAO {
 	   
 	    try {
 	    	conn = it.capone.db.ConnectionFactory.getConnection();
-	    	int idCat = Integer.parseInt(categoria);
-	    	CategoriaBean categ = prendiCategoria(idCat);
-	    	//CategoriaBean categ = prendiCategoriaByNome(categoria);
+	    	//int idCat = Integer.parseInt(categoria);
+	    	//CategoriaBean categ = prendiCategoria(idCat);
+	    	CategoriaBean categ = prendiCategoriaByNome(categoria);
 	    	//Se la categoria non esiste la aggiungo nella tabella qax.Categoria
 	    	if(categ == null) {
 	    		int maxidCategoria = getMaxId("qax.categoria", "idcategoria");
@@ -412,11 +412,19 @@ public class DomandaDAO {
 	    	
 	    	int maxidDomanda = getMaxId("qax.domanda", "iddomanda");
 	    	maxidDomanda++;
+	    	Data dataregistrazione = new Data();
 	    	ps.setInt(1, maxidDomanda);
 	    	ps.setString(2, titolo);
 		    ps.setString(3, descrizione);
 		    ps.setInt(4, categ.getIdcategoria());
 		    ps.setInt(5, utente.getIdutente());
+		    ps.setTimestamp(6, new Timestamp(new GregorianCalendar(
+					dataregistrazione.getAnno(),
+					dataregistrazione.getMese() - 1,
+					dataregistrazione.getGiorno(),
+					dataregistrazione.getOre(),
+					dataregistrazione.getMinuti(),
+					dataregistrazione.getSecondi()).getTimeInMillis()));
 		 
 			ps.executeUpdate();
 			
